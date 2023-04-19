@@ -1,10 +1,29 @@
+
+
+// function fetchItems(name) {
+//   return fetch(`https://pokeapi.co/api/v2/pokemon/${name}`).then(response => {
+//     if (response.ok) {
+//       return response.json();
+//     }
+
+//     return Promise.reject(new Error(`Нет покемона с именем ${name}`));
+//   });
+// }
+
+// const api = {
+//   fetchItems,
+// };
+
+// export default api;
 import { Report } from 'notiflix/build/notiflix-report-aio';
 import { Loading } from 'notiflix/build/notiflix-loading-aio';
 const axios = require('axios').default;
+
+
 const URL = 'https://pixabay.com/api/';
 const API_KEY = '34241449-e1fad7b12dc666345bb2e99a8';
         
-export default class ApiContent {
+export default class Api {
     constructor() {
         this.searchQuery = '';
         this.page = 1;
@@ -23,19 +42,20 @@ export default class ApiContent {
             per_page: this.perPage,
             page: this.page,
         });
-
-        Loading.circle("Loading...");
-        this.isDoing = true;
+            console.log(searchParams.q);
+        // Loading.circle("Loading...");
+        // this.isDoing = true;
         try {
             const response = await axios.get(URL, { params: searchParams });
-              Loading.remove();
+            console.log(response);
+            //   Loading.remove();
             this.incrementPage();
-            this.isDoing = false;
+            // this.isDoing = false;
             return response.data;
         } catch {
-            Report.info('The request was not processed');
-            Loading.remove();
-            this.isDoing = false;
+            Report.info('The request was not processed :(');
+            // Loading.remove();
+            // this.isDoing = false;
         }
     }
 
