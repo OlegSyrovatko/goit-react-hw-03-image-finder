@@ -34,16 +34,17 @@ class ImageGallery extends Component {
   }
 
   render() {
-    const { pictures, error, status } = this.state;
-    const { pictureQuery } = this.props;
+    const { pictures, status } = this.state;
+    // const { pictures, error, status } = this.state;
+    // const { pictureQuery } = this.props;
 
-    if (status === 'idle') {
-      return (
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ margin: '20px auto' }}>Enter your query.</div>
-        </div>
-      );
-    }
+    // if (status === 'idle') {
+    //   return (
+    //     <div style={{ textAlign: 'center' }}>
+    //       <div style={{ margin: '20px auto' }}>Enter your query.</div>
+    //     </div>
+    //   );
+    // }
 
     // if (status === 'pending') {
     //   return <PokemonPendingView pokemonName={pokemonName} />;
