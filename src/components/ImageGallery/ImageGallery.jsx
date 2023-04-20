@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
+// import { Notify } from 'notiflix/build/notiflix-notify-aio';
 //  import { SearchHeader, Form, Button, Input } from './Searchbar.styled';
-import Api from '../../services/content-api';
-const apiContent = new Api();
+import apiContent from '../../services/content-api';
+import PicturesDataView from '../PicturesDataView';
 
 const Status = {
   IDLE: 'idle',
@@ -25,35 +25,37 @@ class ImageGallery extends Component {
 
     if (prevName !== nextName) {
       this.setState({ status: Status.PENDING });
-      console.log(nextName);
 
-      apiContent.query = nextName;
-      const items = apiContent.fetchItems();
-      items.then(data => {
-        // console.log(data);
-        // if (data.totalHits === 0) {
-        //   return Notify.failure(
-        //     'There are no images matching your search query. Please try again'
-        //   );
-        // }
-        // Notify.success(`Hooray! We found ${data.totalHits} images.`);
-        // markupPhotos(data);
-        // showLoadBtn();
-      });
-
-      // setTimeout(() => {
-      //   Api.fetchItems(nextName)
-      //     .then(pictures =>
-      //       this.setState({ pictures, status: Status.RESOLVED })
-      //     )
-      //     .catch(error => this.setState({ error, status: Status.REJECTED }));
-      //   console.log(this.state.pictures);
-      // }, 1000);
+      apiContent
+        .fetchPicture(nextName, 1)
+        .then(pictures => this.setState({ pictures, status: Status.RESOLVED }))
+        .catch(error => this.setState({ error, status: Status.REJECTED }));
     }
   }
 
   render() {
-    return <>1111</>;
+    const { pictures, error, status } = this.state;
+    const { pictureQuery } = this.props;
+
+    if (status === 'idle') {
+      return (
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ margin: '20px auto' }}>Enter your query.</div>
+        </div>
+      );
+    }
+
+    // if (status === 'pending') {
+    //   return <PokemonPendingView pokemonName={pokemonName} />;
+    // }
+
+    // if (status === 'rejected') {
+    //   return <PokemonErrorView message={error.message} />;
+    // }
+
+    if (status === 'resolved') {
+      return <PicturesDataView pictures={pictures} />;
+    }
   }
 }
 export default ImageGallery;
