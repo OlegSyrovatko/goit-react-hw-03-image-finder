@@ -1,11 +1,19 @@
 import PropTypes from 'prop-types';
+import { Ul, Li, Image } from './PicturesDataView.styled';
 
-const PicturesDataView = ({ pictures }) => (
-  <li>
-    {pictures.map(({ id, webformatURL, largeImageURL }) => (
-      <img key={String(id)} src={webformatURL} alt="" />
+const PicturesDataView = ({ pictures, onImageClick }) => (
+  <Ul>
+    {pictures.map(({ id, webformatURL, largeImageURL, tags }) => (
+      <Li key={String(id)}>
+        <Image
+          src={webformatURL}
+          alt={tags}
+          loading="lazy"
+          onClick={() => onImageClick(id, largeImageURL, tags)}
+        />
+      </Li>
     ))}
-  </li>
+  </Ul>
 );
 
 export default PicturesDataView;
@@ -16,6 +24,8 @@ PicturesDataView.propTypes = {
       id: PropTypes.number.isRequired,
       webformatURL: PropTypes.string.isRequired,
       largeImageURL: PropTypes.string.isRequired,
+      tags: PropTypes.string,
     })
   ).isRequired,
+  onImageClick: PropTypes.func.isRequired,
 };

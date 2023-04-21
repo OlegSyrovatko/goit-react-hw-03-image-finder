@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import { Notify } from 'notiflix/build/notiflix-notify-aio';
-//  import { SearchHeader, Form, Button, Input } from './Searchbar.styled';
 import apiContent from '../../services/content-api';
 import PicturesDataView from '../PicturesDataView';
 
@@ -19,7 +17,7 @@ class ImageGallery extends Component {
     status: Status.IDLE,
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const prevName = prevProps.pictureQuery;
     const nextName = this.props.pictureQuery;
 
@@ -35,32 +33,39 @@ class ImageGallery extends Component {
 
   render() {
     const { pictures, status } = this.state;
-    // const { pictures, error, status } = this.state;
-    // const { pictureQuery } = this.props;
-
-    // if (status === 'idle') {
-    //   return (
-    //     <div style={{ textAlign: 'center' }}>
-    //       <div style={{ margin: '20px auto' }}>Enter your query.</div>
-    //     </div>
-    //   );
-    // }
-
-    // if (status === 'pending') {
-    //   return <PokemonPendingView pokemonName={pokemonName} />;
-    // }
-
-    // if (status === 'rejected') {
-    //   return <PokemonErrorView message={error.message} />;
-    // }
+    const { onImageClick } = this.props;
 
     if (status === 'resolved') {
-      return <PicturesDataView pictures={pictures} />;
+      return (
+        <PicturesDataView pictures={pictures} onImageClick={onImageClick} />
+      );
     }
+    return null;
   }
 }
+
 export default ImageGallery;
 
 ImageGallery.propTypes = {
   pictureQuery: PropTypes.string.isRequired,
+  onImageClick: PropTypes.func.isRequired,
 };
+
+// const { pictures, error, status } = this.state;
+// const { pictureQuery } = this.props;
+
+// if (status === 'idle') {
+//   return (
+//     <div style={{ textAlign: 'center' }}>
+//       <div style={{ margin: '20px auto' }}>Enter your query.</div>
+//     </div>
+//   );
+// }
+
+// if (status === 'pending') {
+//   return <PokemonPendingView pokemonName={pokemonName} />;
+// }
+
+// if (status === 'rejected') {
+//   return <PokemonErrorView message={error.message} />;
+// }
