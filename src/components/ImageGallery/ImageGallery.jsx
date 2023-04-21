@@ -14,9 +14,10 @@ const Status = {
 
 class ImageGallery extends Component {
   state = {
-    pictures: null,
+    pictures: [],
     error: null,
     page: 1,
+    scrollPosition: 0,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -26,14 +27,43 @@ class ImageGallery extends Component {
     const nextPage = this.state.page;
 
     if (prevName !== nextName || prevPage !== nextPage) {
-      this.setState({ status: Status.PENDING });
+      this.setState({
+        status: Status.PENDING,
+        scrollPosition:
+          window.pageYOffset || document.documentElement.scrollTop,
+      });
 
       apiContent
-        .fetchPicture(nextName, prevName + 1)
-        .then(pictures => this.setState({ pictures, status: Status.RESOLVED }))
+        .fetchPicture(nextName, nextPage)
+        .then(pictures => {
+          if (prevName !== nextName) {
+            this.setState({
+              pictures: pictures,
+              status: Status.RESOLVED,
+            });
+          } else {
+            this.setState(
+              {
+                pictures: prevState.pictures
+                  ? [...prevState.pictures, ...pictures]
+                  : pictures,
+                status: Status.RESOLVED,
+              },
+              () => {
+                window.scrollTo(0, this.state.scrollPosition);
+              }
+            );
+          }
+        })
         .catch(error => this.setState({ error, status: Status.REJECTED }));
     }
   }
+
+  handleLoadMore = () => {
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }));
+  };
 
   render() {
     const { pictures, status } = this.state;
@@ -47,14 +77,16 @@ class ImageGallery extends Component {
     }
 
     if (status === 'rejected') {
-      Report.info('The request was not processed');
+      Report.info(`${this.state.error}`);
     }
 
     if (status === 'resolved') {
       return (
         <>
           <PicturesDataView pictures={pictures} onImageClick={onImageClick} />
-          <Button onClick={this.state.page + 1}>Load more</Button>
+          {pictures && pictures.length >= 12 && (
+            <Button onClick={this.handleLoadMore}>Load more</Button>
+          )}
         </>
       );
     }

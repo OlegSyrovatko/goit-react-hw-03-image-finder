@@ -8,7 +8,6 @@ const PicturesDataView = ({ pictures, onImageClick }) => (
         <Image
           src={webformatURL}
           alt={tags}
-          loading="lazy"
           onClick={() => onImageClick(id, largeImageURL, tags)}
         />
       </Li>

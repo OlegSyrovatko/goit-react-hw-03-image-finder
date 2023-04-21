@@ -3,6 +3,8 @@ import Searchbar from 'components/Searchbar';
 import ImageGallery from 'components/ImageGallery';
 import Modal from 'components/Modal';
 import { Container } from './App.styled';
+import { Loading } from 'notiflix/build/notiflix-loading-aio';
+import { Report } from 'notiflix/build/notiflix-report-aio';
 
 export class App extends Component {
   state = {
@@ -15,24 +17,30 @@ export class App extends Component {
     this.setState({ pictureQuery });
   };
 
-  handleImageClick = (id, largeImageURL, tags) => {
-    this.setState({
-      showModal: true,
-      selectedImage: { id, largeImageURL, tags },
-    });
+  handleImageClick = async (id, largeImageURL, tags) => {
+    Loading.circle('Loading...');
+    try {
+      this.setState({
+        showModal: true,
+        selectedImage: { id, largeImageURL, tags },
+      });
+    } catch (error) {
+      Report.info(`${error}`);
+    } finally {
+      Loading.remove();
+    }
   };
-
   handleClose = () => {
     this.setState({ showModal: false, selectedImage: null });
   };
 
   render() {
-    const { showModal, selectedImage } = this.state;
+    const { showModal, selectedImage, pictureQuery } = this.state;
     return (
       <Container>
         <Searchbar onSubmit={this.search} />
         <ImageGallery
-          pictureQuery={this.state.pictureQuery}
+          pictureQuery={pictureQuery}
           onImageClick={this.handleImageClick}
         />
         {showModal && selectedImage && (
