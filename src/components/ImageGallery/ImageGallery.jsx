@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import apiContent from '../../services/content-api';
 import PicturesDataView from '../PicturesDataView';
 import { Loading } from 'notiflix/build/notiflix-loading-aio';
+import { Report } from 'notiflix/build/notiflix-report-aio';
 
 const Status = {
   IDLE: 'idle',
@@ -41,6 +42,10 @@ class ImageGallery extends Component {
       return null;
     } else {
       Loading.remove();
+    }
+
+    if (status === 'rejected') {
+      Report.info('The request was not processed');
     }
 
     if (status === 'resolved') {
