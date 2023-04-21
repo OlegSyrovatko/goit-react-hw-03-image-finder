@@ -16,20 +16,17 @@ class ImageGallery extends Component {
   state = {
     pictures: null,
     error: null,
-    page: 1,
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const prevName = prevProps.pictureQuery;
     const nextName = this.props.pictureQuery;
-    const prevPage = prevState.page;
-    const nextPage = this.state.page;
 
-    if (prevName !== nextName || prevPage !== nextPage) {
+    if (prevName !== nextName) {
       this.setState({ status: Status.PENDING });
 
       apiContent
-        .fetchPicture(nextName, prevName + 1)
+        .fetchPicture(nextName, 1)
         .then(pictures => this.setState({ pictures, status: Status.RESOLVED }))
         .catch(error => this.setState({ error, status: Status.REJECTED }));
     }
@@ -54,7 +51,7 @@ class ImageGallery extends Component {
       return (
         <>
           <PicturesDataView pictures={pictures} onImageClick={onImageClick} />
-          <Button onClick={this.state.page + 1}>Load more</Button>
+          <Button>Load more</Button>
         </>
       );
     }

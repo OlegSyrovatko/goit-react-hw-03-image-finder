@@ -42,7 +42,3 @@ export class App extends Component {
     );
   }
 }
-
-/* <Loader></Loader>  */
-
-/* <Button></Button> */

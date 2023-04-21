@@ -17,12 +17,3 @@ const api = {
 
 export default api;
 
-        // const searchParams = new URLSearchParams({
-        //     key: API_KEY,
-        //     q: this.searchQuery,
-        //     image_type: 'photo',
-        //     orientation: 'horizontal',
-        //     safesearch: true,
-        //     per_page: this.perPage,
-        //     page: this.page,
-        // });
