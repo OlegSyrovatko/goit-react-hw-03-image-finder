@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import apiContent from '../../services/content-api';
 import PicturesDataView from '../PicturesDataView';
+import { Loading } from 'notiflix/build/notiflix-loading-aio';
 
 const Status = {
   IDLE: 'idle',
@@ -35,6 +36,13 @@ class ImageGallery extends Component {
     const { pictures, status } = this.state;
     const { onImageClick } = this.props;
 
+    if (status === Status.PENDING) {
+      Loading.circle('Loading...');
+      return null;
+    } else {
+      Loading.remove();
+    }
+
     if (status === 'resolved') {
       return (
         <PicturesDataView pictures={pictures} onImageClick={onImageClick} />
@@ -60,10 +68,6 @@ ImageGallery.propTypes = {
 //       <div style={{ margin: '20px auto' }}>Enter your query.</div>
 //     </div>
 //   );
-// }
-
-// if (status === 'pending') {
-//   return <PokemonPendingView pokemonName={pokemonName} />;
 // }
 
 // if (status === 'rejected') {
